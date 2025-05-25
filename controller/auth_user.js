@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const {validationResult} = require('express-validator')
 const { Admin } = require('../model/admin_model')
+const { Client } = require('../model/client_model')
 const changeUserStates =  async(req,res)=>{
   try {
     const token = req.headers.token;
@@ -289,4 +290,35 @@ const inActiveUser = async(req,res)=>{
   }
 }
 
-module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates}
+const addClient = async (req,res) => {
+  try {
+    const token = req.headers.token;
+  const {username,userWork,userWorkName,nif,phoneNumber,numberOfNif,typeOfProduit,quntityPaid,quntityDisponible,tax,img,longitutude,latitude,notes} = req.body;
+  const eng = await User.findOne({token:token})
+  if (eng.role != "eng") {
+    return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
+  }
+  const client = new Client({
+    username:username ,
+    userWork:userWork  ,
+    userWorkName:userWorkName,
+    nif:nif,
+    phoneNumber:phoneNumber,
+    numberOfNif:numberOfNif,
+    typeOfProduit:typeOfProduit,
+    quntityPaid:quntityPaid,
+    quntityDisponible:quntityDisponible,
+    tax:tax,
+    img:img,
+    longitutude:longitutude,
+    latitude:latitude,
+    notes:notes});
+ const clientRet =  await client.save();
+   res.status(200).json({"status":httpStatus.SUCCESS,"data":clientRet});
+  } catch (error) {
+     console.log(error);
+    
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates,addClient}
