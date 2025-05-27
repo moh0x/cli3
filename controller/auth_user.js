@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken')
 const {validationResult} = require('express-validator')
 const { Admin } = require('../model/admin_model')
 const { Client } = require('../model/client_model')
+const { Voyage } = require('../model/voyage_model')
 const changeUserStates =  async(req,res)=>{
   try {
     const token = req.headers.token;
@@ -127,7 +128,7 @@ if (user) {
         res.status(400).json({"status":httpStatus.FAIL,"data":null,"message":"password not match"});
     }
    } else {
-    res.status(400).json({"status":httpStatus.FAIL,"data":null,"message":"there is no user with this number"});
+    res.status(400).json({"status":httpStatus.FAIL,"data":null,"message":"there is no user with this email"});
    }
 } else {
 res.status(400).json({"status":httpStatus.FAIL,"data":null,"message":valid['errors'][0].msg});
@@ -289,7 +290,6 @@ const inActiveUser = async(req,res)=>{
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
-
 const addClient = async (req,res) => {
   try {
     const token = req.headers.token;
@@ -321,4 +321,39 @@ const addClient = async (req,res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
-module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates,addClient}
+const addVoyage = async (req,res) => {
+  try {
+    const token = req.headers.token;
+  const {username,phoneNumber,productName,quntityPaid,quntityDisponible,tax,img,notes} = req.body;
+  const eng = await User.findOne({token:token})
+  if (eng.role != "eng") {
+    return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
+  }
+  const voyage = new Voyage({
+    username:username ,
+    phoneNumber:phoneNumber,
+    productName:productName,
+    quntityPaid:quntityPaid,
+    quntityDisponible:quntityDisponible,
+    tax:tax,
+    img:img,
+    notes:notes});
+ const voyageRet =  await voyage.save();
+   res.status(200).json({"status":httpStatus.SUCCESS,"data":voyageRet});
+  } catch (error) {
+     console.log(error);
+    
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+const engInfo = async (req,res)=>{
+  try {
+    const token = req.headers.token;
+    const user = await User.findOne({token:token,role:"eng"},{password:false})
+       res.status(200).json({"status":httpStatus.SUCCESS,"data":user})
+    
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates,addClient,addVoyage,engInfo}
