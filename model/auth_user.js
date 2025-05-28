@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema(
             type:String,
             required:true,
             maxlength:10,
-			enum:['eng']
+           enum:['eng',"cli","admin"]
         },
 	},
 	
