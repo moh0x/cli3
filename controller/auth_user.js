@@ -406,4 +406,34 @@ const addAnalyse = async (req,res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
-module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates,addClient,addVoyage,engInfo,addMarad,addAnalyse}
+const mardClient = async (req,res) => {
+  try {
+    const token = req.headers.token;
+  const client = await Client.findOne({token:token})
+  if (!client) {
+    return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
+  }
+  const mards = await Mard.find({userId:client._id})
+   res.status(200).json({"status":httpStatus.SUCCESS,"data":mards});
+  } catch (error) {
+     console.log(error);
+    
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+const analyseClient = async (req,res) => {
+  try {
+    const token = req.headers.token;
+  const client = await Client.findOne({token:token})
+  if (!client) {
+    return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
+  }
+  const analyses = await Analyse.find({userId:client._id})
+   res.status(200).json({"status":httpStatus.SUCCESS,"data":analyses});
+  } catch (error) {
+     console.log(error);
+    
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates,addClient,addVoyage,engInfo,addMarad,addAnalyse,mardClient,analyseClient}
