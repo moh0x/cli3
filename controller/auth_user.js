@@ -6,6 +6,8 @@ const {validationResult} = require('express-validator')
 const { Admin } = require('../model/admin_model')
 const { Client } = require('../model/client_model')
 const { Voyage } = require('../model/voyage_model')
+const { Mard } = require('../model/marad_model')
+const { Analyse } = require('../model/analyse_model')
 const changeUserStates =  async(req,res)=>{
   try {
     const token = req.headers.token;
@@ -356,4 +358,52 @@ const engInfo = async (req,res)=>{
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
-module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates,addClient,addVoyage,engInfo}
+const addMarad = async (req,res) => {
+  try {
+    const token = req.headers.token;
+  const {address,longtitude,latitude,notes,typeName} = req.body;
+  const client = await Client.findOne({token:token})
+  if (!client) {
+    return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
+  }
+  const mard = new Mard({
+    username:client.username ,
+    typeName:typeName,
+    userId:client._id,
+    longtitude:longtitude,
+    latitude:latitude,
+    address:address,
+    notes:notes});
+ const mardRet =  await mard.save();
+   res.status(200).json({"status":httpStatus.SUCCESS,"data":mardRet});
+  } catch (error) {
+     console.log(error);
+    
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+const addAnalyse = async (req,res) => {
+  try {
+    const token = req.headers.token;
+  const {address,longtitude,latitude,notes,typeName} = req.body;
+  const client = await Client.findOne({token:token})
+  if (!client) {
+    return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
+  }
+  const analyse = new Analyse({
+    username:client.username ,
+    typeName:typeName,
+    userId:client._id,
+    longtitude:longtitude,
+    latitude:latitude,
+    address:address,
+    notes:notes});
+ const analyseRet =  await analyse.save();
+   res.status(200).json({"status":httpStatus.SUCCESS,"data":analyseRet});
+  } catch (error) {
+     console.log(error);
+    
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates,addClient,addVoyage,engInfo,addMarad,addAnalyse}
