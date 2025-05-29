@@ -25,3 +25,4 @@ router.put('/disBan',verifyToken,verifyAdmin,authController.disBan)
 router.put('/status',verifyToken,authController.changeUserStates)
 router.delete('/delete',verifyToken,authController.deleteUser)
 module.exports = router
+
