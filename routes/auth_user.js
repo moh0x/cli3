@@ -8,6 +8,8 @@ router.post('/signup',body('password').isLength({min:8,max:50}).withMessage('typ
 router.post('/login',body("email").isLength({min:5,max:50}).withMessage("type valid email"),body('password').isLength({min:8,max:50}).withMessage('type valid password'),authController.login)
 router.post('/client/add',verifyToken,authController.addClient)
 router.post('/voyage/add',verifyToken,authController.addVoyage)
+router.post('/analyse/add',verifyToken,authController.addAnalyse)
+router.post('/mard/add',verifyToken,authController.addMarad)
 router.post('/logout',verifyToken,authController.logout)
 router.put('/update-profile',verifyToken,authController.updateProfile)
 router.put('/update-notification',verifyToken,authController.updateNotificationToken)
