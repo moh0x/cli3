@@ -14,7 +14,7 @@ const analyseSchema = new mongoose.Schema(
             type:String,
         },
         address:{
-            type:Number
+            type:String
         },
         longtitude:{
             type:Number
