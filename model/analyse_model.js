@@ -27,6 +27,9 @@ const analyseSchema = new mongoose.Schema(
         },
         img:{
             type:String
+        }, status:{
+            type:String,
+            default:"pending"
         }
     },
     
