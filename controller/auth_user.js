@@ -347,10 +347,10 @@ const addVoyage = async (req,res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
-const engInfo = async (req,res)=>{
+const clientInfo = async (req,res)=>{
   try {
     const token = req.headers.token;
-    const user = await User.findOne({token:token,role:"eng"},{password:false})
+    const user = await Client.findOne({token:token},{password:false})
        res.status(200).json({"status":httpStatus.SUCCESS,"data":user})
     
   } catch (error) {
@@ -464,4 +464,4 @@ const loginClient = async (req,res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
-module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates,addClient,addVoyage,engInfo,addMarad,addAnalyse,mardClient,analyseClient,voyagesClient,loginClient}
+module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates,addClient,addVoyage,clientInfo,addMarad,addAnalyse,mardClient,analyseClient,voyagesClient,loginClient}
