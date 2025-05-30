@@ -326,19 +326,18 @@ const addClient = async (req,res) => {
 const addVoyage = async (req,res) => {
   try {
     const token = req.headers.token;
-  const {username,phoneNumber,productName,quntityPaid,quntityDisponible,tax,img,notes} = req.body;
+  const {username,voyageType,address,img,notes,longitutude,latitude} = req.body;
   const eng = await User.findOne({token:token})
   if (eng.role != "eng") {
     return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
   }
   const voyage = new Voyage({
     username:username ,
-    phoneNumber:phoneNumber,
-    productName:productName,
-    quntityPaid:quntityPaid,
-    quntityDisponible:quntityDisponible,
-    tax:tax,
+    voyageType:voyageType,
+        address:address,
+        latitude:latitude,
     img:img,
+    longitutude:longitutude,
     notes:notes});
  const voyageRet =  await voyage.save();
    res.status(200).json({"status":httpStatus.SUCCESS,"data":voyageRet});
@@ -436,4 +435,19 @@ const analyseClient = async (req,res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
-module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates,addClient,addVoyage,engInfo,addMarad,addAnalyse,mardClient,analyseClient}
+const voyagesClient = async (req,res) => {
+  try {
+    const token = req.headers.token;
+  const client = await Client.findOne({token:token})
+  if (!client) {
+    return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
+  }
+  const voyages = await Voyage.find({username:client.username})
+   res.status(200).json({"status":httpStatus.SUCCESS,"data":voyages});
+  } catch (error) {
+     console.log(error);
+    
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates,addClient,addVoyage,engInfo,addMarad,addAnalyse,mardClient,analyseClient,voyagesClient}
