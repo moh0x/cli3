@@ -450,4 +450,18 @@ const voyagesClient = async (req,res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
-module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates,addClient,addVoyage,engInfo,addMarad,addAnalyse,mardClient,analyseClient,voyagesClient}
+const loginClient = async (req,res) => {
+  try {
+    const {email,password} = req.body
+  const client = await Client.findOne({email:email,password:password})
+  if (!client) {
+    return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
+  }
+   res.status(200).json({"status":httpStatus.SUCCESS,"data":client});
+  } catch (error) {
+     console.log(error);
+    
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates,addClient,addVoyage,engInfo,addMarad,addAnalyse,mardClient,analyseClient,voyagesClient,loginClient}
