@@ -4,6 +4,7 @@ const clientSchema = new mongoose.Schema(
     {
         email:{type: String,},
         password:{type: String,},
+        token:{type:String},
         username:{
             type: String,
             
