@@ -295,12 +295,16 @@ const inActiveUser = async(req,res)=>{
 const addClient = async (req,res) => {
   try {
     const token = req.headers.token;
-  const {username,userWork,userWorkName,nif,phoneNumber,numberOfNif,typeOfProduit,quntityPaid,quntityDisponible,tax,img,longitutude,latitude,notes} = req.body;
+  const {email,password,username,userWork,userWorkName,nif,phoneNumber,numberOfNif,typeOfProduit,quntityPaid,quntityDisponible,tax,img,longitutude,latitude,notes} = req.body;
   const eng = await User.findOne({token:token})
   if (eng.role != "eng") {
     return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
   }
+    const tokenCli = jwt.sign({email:email,username:username},"token")
   const client = new Client({
+    token:tokenCli,
+    email:email,
+    password:password,
     username:username ,
     userWork:userWork  ,
     userWorkName:userWorkName,
@@ -453,11 +457,18 @@ const voyagesClient = async (req,res) => {
 const loginClient = async (req,res) => {
   try {
     const {email,password} = req.body
-  const client = await Client.findOne({email:email,password:password})
+  const client = await Client.findOne({email:email,password:password});
+
   if (!client) {
     return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
   }
-   res.status(200).json({"status":httpStatus.SUCCESS,"data":client});
+    const tokenCli = jwt.sign({email:email,username:username},"token")
+  await Client.findByIdAndUpdate(client._id,{$set:{
+    token:tokenCli
+  }})
+  await client.save();
+  const cliRet = await Client.findOne({email:email,password:password});
+     res.status(200).json({"status":httpStatus.SUCCESS,"data":cliRet});
   } catch (error) {
      console.log(error);
     
