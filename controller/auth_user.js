@@ -295,7 +295,7 @@ const inActiveUser = async(req,res)=>{
 const addClient = async (req,res) => {
   try {
     const token = req.headers.token;
-  const {email,password,username,userWork,userWorkName,nif,phoneNumber,numberOfNif,typeOfProduit,quntityPaid,quntityDisponible,tax,img,longitutude,latitude,notes} = req.body;
+  const {email,password,username,userWork,userWorkName,nif,phoneNumber,numberOfNif,typeOfProduit,quntityPaid,quntityDisponible,tax,longitutude,latitude,notes} = req.body;
   const eng = await User.findOne({token:token})
   if (eng.role != "eng") {
     return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
@@ -315,7 +315,6 @@ const addClient = async (req,res) => {
     quntityPaid:quntityPaid,
     quntityDisponible:quntityDisponible,
     tax:tax,
-    img:img,
     longitutude:longitutude,
     latitude:latitude,
     notes:notes});
@@ -326,6 +325,22 @@ const addClient = async (req,res) => {
     
     res.status(500).json({ error: "Internal Server Error" });
   }
+}
+const clientsEng = async(req,res)=>{
+   try {
+     const token = req.headers.token;
+      const eng = await User.findOne({token:token})
+   if (eng.role != "eng") {
+    return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
+  }
+  const clients = await Client.find().sort({createdAt:-1})
+     res.status(200).json({"status":httpStatus.SUCCESS,"data":clients});
+   } catch (error) {
+         console.log(error);
+    
+    res.status(500).json({ error: "Internal Server Error" });
+   }
+
 }
 const addVoyage = async (req,res) => {
   try {
@@ -361,6 +376,7 @@ const clientInfo = async (req,res)=>{
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
+
 const addMarad = async (req,res) => {
   try {
     const token = req.headers.token;
@@ -475,4 +491,4 @@ const loginClient = async (req,res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
-module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates,addClient,addVoyage,clientInfo,addMarad,addAnalyse,mardClient,analyseClient,voyagesClient,loginClient}
+module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates,addClient,addVoyage,clientInfo,addMarad,addAnalyse,mardClient,analyseClient,voyagesClient,loginClient,clientsEng}
