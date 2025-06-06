@@ -18,7 +18,7 @@ router.post('/logout',verifyToken,authController.logout)
 router.put('/update-profile',verifyToken,authController.updateProfile)
 router.put('/update-notification',verifyToken,authController.updateNotificationToken)
 router.get('/client-info',authController.clientInfo)
-router.get('/clients',verifyToken,authController.clientsEng)
+router.get('/clients',authController.clientsEng)
 
 router.get('/inActive',verifyToken,verifyAdmin,authController.getInActiveUsers)
 router.put('/active',verifyToken,verifyAdmin,authController.activeUser)
