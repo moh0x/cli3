@@ -473,6 +473,21 @@ const voyagesClient = async (req,res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
+const voyagesEng = async (req,res) => {
+  try {
+    const token = req.headers.token;
+const eng = await User.findOne({token:token})
+  if (eng.role != "eng") {
+    return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
+  }
+  const voyages = await Voyage.find()
+   res.status(200).json({"status":httpStatus.SUCCESS,"data":voyages});
+  } catch (error) {
+     console.log(error);
+    
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
 const loginClient = async (req,res) => {
   try {
     const {email,password} = req.body
@@ -494,4 +509,4 @@ const loginClient = async (req,res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
-module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates,addClient,addVoyage,clientInfo,addMarad,addAnalyse,mardClient,analyseClient,voyagesClient,loginClient,clientsEng}
+module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates,addClient,addVoyage,clientInfo,addMarad,addAnalyse,mardClient,analyseClient,voyagesClient,loginClient,clientsEng,voyagesEng}
