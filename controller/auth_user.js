@@ -89,7 +89,7 @@ const signUp =async(req,res)=>{
         if (!valid.isEmpty()) {
           return  res.status(400).json({"status":httpStatus.FAIL,"data":null,"message":valid['errors'][0].msg});
         }
-        const {username,email,password,role} = req.body      
+        const {username,email,password,role,longitutude,latitude,address} = req.body      
         const user = await User.findOne({email:email});
         if (user) {
           return  res.status(400).json({"status":httpStatus.FAIL,"data":null,"message":"user already exist"})
@@ -102,7 +102,10 @@ const signUp =async(req,res)=>{
             email:email,
             password:hashPassword,
             token:token,
-            role:role
+            role:role,
+            address:address,
+            longitutude:longitutude,
+            latitude:latitude
            
         })
         await newUser.save()  
