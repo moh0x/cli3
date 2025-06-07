@@ -29,7 +29,16 @@ const userSchema = new mongoose.Schema(
             type:String,
             required:true,
             maxlength:10,
-           enum:['eng',"cli","admin"]
+			enum:['eng',"cli","admin"]
+        },
+		        longitutude:{
+            type:Number
+        },
+        latitude:{
+            type:Number
+        },
+		address:{
+            type:String
         },
 	},
 	
