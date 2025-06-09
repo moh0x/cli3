@@ -520,15 +520,15 @@ const eng = await User.findOne({token:token})
   const voyages = await Voyage.find();
   const analyses = await Analyse.find();
   const mards = await Mard.find();
-  const quntityPaid = 0;
+  let quntityPaid = 0;
   for (let index = 0; index < clients.length; index++) {
     quntityPaid = clients[index].quntityPaid + quntityPaid;  
   }
-  const quntityDisponible = 0;
+  let quntityDisponible = 0;
   for (let index = 0; index < clients.length; index++) {
     quntityDisponible = clients[index].quntityDisponible + quntityDisponible;  
   }
-    const tax = 0;
+    let tax = 0;
   for (let index = 0; index < clients.length; index++) {
     tax = clients[index].tax + tax;  
   }
