@@ -20,9 +20,8 @@ router.put('/update-profile',verifyToken,authController.updateProfile)
 router.put('/update-notification',verifyToken,authController.updateNotificationToken)
 router.get('/client-info',authController.clientInfo)
 router.get('/user-info',authController.userInfo)
-
 router.get('/clients',verifyToken,authController.clientsEng)
-
+router.get('/statics/eng',verifyToken,authController.staticsEng)
 router.get('/inActive',verifyToken,verifyAdmin,authController.getInActiveUsers)
 router.put('/active',verifyToken,verifyAdmin,authController.activeUser)
 router.get('/active',verifyToken,verifyAdmin,authController.getActiveUsers)
