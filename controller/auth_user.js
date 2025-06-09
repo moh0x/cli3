@@ -509,4 +509,42 @@ const loginClient = async (req,res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
-module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates,addClient,addVoyage,clientInfo,addMarad,addAnalyse,mardClient,analyseClient,voyagesClient,loginClient,clientsEng,voyagesEng}
+const staticsEng = async (req,res) => {
+  try {
+    const token = req.headers.token;
+const eng = await User.findOne({token:token})
+  if (eng.role != "eng") {
+    return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
+  }
+  const clients = await Client.find();
+  const voyages = await Voyage.find();
+  const analyses = await Analyse.find();
+  const mards = await Mard.find();
+  const quntityPaid = 0;
+  for (let index = 0; index < clients.length; index++) {
+    quntityPaid = clients[index].quntityPaid + quntityPaid;  
+  }
+  const quntityDisponible = 0;
+  for (let index = 0; index < clients.length; index++) {
+    quntityDisponible = clients[index].quntityDisponible + quntityDisponible;  
+  }
+    const tax = 0;
+  for (let index = 0; index < clients.length; index++) {
+    tax = clients[index].tax + tax;  
+  }
+   res.status(200).json({"status":httpStatus.SUCCESS,"data":{
+    "clients":clients.length,
+    "voyages":voyages.length,
+    "analyses":analyses.length,
+    "mards":mards.length,
+    "quntityPaid":quntityPaid,
+    "quntityDisponible":quntityDisponible,
+    "tax":tax
+   }});
+  } catch (error) {
+     console.log(error);
+    
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates,addClient,addVoyage,clientInfo,addMarad,addAnalyse,mardClient,analyseClient,voyagesClient,loginClient,clientsEng,voyagesEng,staticsEng}
