@@ -371,7 +371,7 @@ const getClientByIdEng = async(req,res) =>{
    if (eng.role != "eng") {
     return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
   }
-  const client = await Client.findOne({id:req.body.id})
+  const client = await Client.findOne({_id:req.body.id})
      res.status(200).json({"status":httpStatus.SUCCESS,"data":client});
   } catch (error) {
       res.status(500).json({ error: "Internal Server Error" });
