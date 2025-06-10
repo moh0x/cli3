@@ -32,4 +32,7 @@ router.put('/ban',verifyToken,verifyAdmin,authController.ban)
 router.put('/disBan',verifyToken,verifyAdmin,authController.disBan)
 router.put('/status',verifyToken,authController.changeUserStates)
 router.delete('/delete',verifyToken,authController.deleteUser)
+router.put('/client/edit',verifyToken,authController.editClient)
+router.post('/client/get',verifyToken,authController.getClientByIdEng)
+
 module.exports = router
