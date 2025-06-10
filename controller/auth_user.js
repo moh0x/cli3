@@ -329,6 +329,55 @@ const addClient = async (req,res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
+const editClient = async (req,res) => {
+  try {
+    const token = req.headers.token;
+  const {id,email,password,username,userWork,userWorkName,nif,phoneNumber,numberOfNif,typeOfProduit,quntityPaid,quntityDisponible,tax,longitutude,latitude,notes} = req.body;
+  const eng = await User.findOne({token:token})
+  if (eng.role != "eng") {
+    return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
+  }
+  const client = await Client.findOne({id:id})
+    const tokenCli = jwt.sign({email:email ?? client.email,username:username ?? client.username},"token")
+  const clientS = await Client.findByIdAndUpdate(client._id,{$set:{
+    token:tokenCli,
+    email:email ?? client.email,
+    password:password ?? client.password,
+    username:username ?? client.username,
+    userWork:userWork  ?? client.userWork,
+    userWorkName:userWorkName ?? client.userWorkName,
+    nif:nif ?? client.nif,
+    phoneNumber:phoneNumber ?? client.phoneNumber,
+    numberOfNif:numberOfNif ?? client.numberOfNif,
+    typeOfProduit:typeOfProduit ?? client.typeOfProduit,
+    quntityPaid:quntityPaid ?? client.quntityPaid,
+    quntityDisponible:quntityDisponible ?? client.quntityDisponible,
+    tax:tax ?? client.tax,
+    longitutude:longitutude ?? client.longitutude,
+    latitude:latitude ?? client.latitude,
+    notes:notes ?? client.notes}});
+ const clientRet =  await clientS.save();
+   res.status(200).json({"status":httpStatus.SUCCESS,"data":clientRet});
+  } catch (error) {
+     console.log(error);
+    
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+const getClientByIdEng = async(req,res) =>{
+  try {
+     const token = req.headers.token;
+  const eng = await User.findOne({token:token})
+   if (eng.role != "eng") {
+    return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
+  }
+  const client = await Client.findOne({id:req.body.id})
+     res.status(200).json({"status":httpStatus.SUCCESS,"data":client});
+  } catch (error) {
+      res.status(500).json({ error: "Internal Server Error" });
+  }
+
+}
 const clientsEng = async(req,res)=>{
    try {
      const token = req.headers.token;
@@ -551,6 +600,8 @@ const mardEng = async (req,res) => {
   try {
      const token = req.headers.token;
 const eng = await User.findOne({token:token})
+console.log(eng);
+
   if (eng.role != "eng") {
     return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
   }
@@ -577,4 +628,4 @@ const eng = await User.findOne({token:token})
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
-module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates,addClient,addVoyage,clientInfo,addMarad,addAnalyse,mardClient,analyseClient,voyagesClient,loginClient,clientsEng,voyagesEng,staticsEng,mardEng,analyseEng}
+module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates,addClient,addVoyage,clientInfo,addMarad,addAnalyse,mardClient,analyseClient,voyagesClient,loginClient,clientsEng,voyagesEng,staticsEng,mardEng,analyseEng,editClient,getClientByIdEng}
