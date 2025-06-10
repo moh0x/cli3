@@ -520,15 +520,15 @@ const eng = await User.findOne({token:token})
   const voyages = await Voyage.find();
   const analyses = await Analyse.find();
   const mards = await Mard.find();
-  let quntityPaid = 0;
+  const quntityPaid = 0;
   for (let index = 0; index < clients.length; index++) {
     quntityPaid = clients[index].quntityPaid + quntityPaid;  
   }
-  let quntityDisponible = 0;
+  const quntityDisponible = 0;
   for (let index = 0; index < clients.length; index++) {
     quntityDisponible = clients[index].quntityDisponible + quntityDisponible;  
   }
-    let tax = 0;
+    const tax = 0;
   for (let index = 0; index < clients.length; index++) {
     tax = clients[index].tax + tax;  
   }
@@ -547,4 +547,34 @@ const eng = await User.findOne({token:token})
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
-module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates,addClient,addVoyage,clientInfo,addMarad,addAnalyse,mardClient,analyseClient,voyagesClient,loginClient,clientsEng,voyagesEng,staticsEng}
+const mardEng = async (req,res) => {
+  try {
+     const token = req.headers.token;
+const eng = await User.findOne({token:token})
+  if (eng.role != "eng") {
+    return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
+  }
+  const mards = await Mard.find().sort({createdAt:-1})
+   res.status(200).json({"status":httpStatus.SUCCESS,"data":mards});
+  } catch (error) {
+     console.log(error);
+    
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+const analyseEng = async (req,res) => {
+  try {
+     const token = req.headers.token;
+const eng = await User.findOne({token:token})
+  if (eng.role != "eng") {
+    return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
+  }
+  const analyses = await Analyse.find().sort({createdAt:-1})
+   res.status(200).json({"status":httpStatus.SUCCESS,"data":analyses});
+  } catch (error) {
+     console.log(error);
+    
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates,addClient,addVoyage,clientInfo,addMarad,addAnalyse,mardClient,analyseClient,voyagesClient,loginClient,clientsEng,voyagesEng,staticsEng,mardEng,analyseEng}
