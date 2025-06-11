@@ -371,7 +371,7 @@ const getClientByIdEng = async(req,res) =>{
    if (eng.role != "eng") {
     return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
   }
-  const client = await Client.findOne({_id:req.body.id})
+  const client = await Client.findOne({id:req.body.id})
      res.status(200).json({"status":httpStatus.SUCCESS,"data":client});
   } catch (error) {
       res.status(500).json({ error: "Internal Server Error" });
@@ -628,4 +628,61 @@ const eng = await User.findOne({token:token})
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
-module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates,addClient,addVoyage,clientInfo,addMarad,addAnalyse,mardClient,analyseClient,voyagesClient,loginClient,clientsEng,voyagesEng,staticsEng,mardEng,analyseEng,editClient,getClientByIdEng}
+const editVoyage = async (req,res) => {
+  try {
+    const token = req.headers.token;
+  const {id,username,voyageType,address,img,notes,longitutude,latitude} = req.body;
+  const admin = await User.findOne({token:token})
+  if (admin.role != "admin") {
+    return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
+  }
+  const voyage = await Voyage.findOne({id:id})
+  const voyageS = await Voyage.findByIdAndUpdate(voyage._id,{$set:{
+    username:username ?? voyage.username,
+    voyageType:voyageType ?? voyage.voyageType,
+    address:address ?? voyage.address,
+    img:img  ?? voyage.img,
+    notes:notes ?? voyage.notes,
+    longitutude:longitutude ?? voyage.longitutude,
+    latitude:latitude ?? voyage.latitude,}});
+ const voyageRet =  await voyageS.save();
+   res.status(200).json({"status":httpStatus.SUCCESS,"data":voyageRet});
+  } catch (error) {
+     console.log(error);
+    
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+const getVoyageByIdAdmin = async(req,res) =>{
+  try {
+     const token = req.headers.token;
+  const admin = await User.findOne({token:token})
+   if (admin.role != "admin") {
+    return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
+  }
+  const voyage = await Voyage.findOne({id:req.body.id})
+     res.status(200).json({"status":httpStatus.SUCCESS,"data":voyage});
+  } catch (error) {
+      res.status(500).json({ error: "Internal Server Error" });
+  }
+
+}
+const deleteVoayage = async (req,res) => {
+  try {
+    const token = req.headers.token;
+  const {id} = req.body;
+  const admin = await User.findOne({token:token})
+  if (admin.role != "admin") {
+    return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
+  }
+  const voyage = await Voyage.findOne({id:id})
+  const voyageS = await Voyage.findByIdAndDelete(voyage._id);
+ const voyageRet =  await voyageS.save();
+   res.status(200).json({"status":httpStatus.SUCCESS,"data":null});
+  } catch (error) {
+     console.log(error);
+    
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates,addClient,addVoyage,clientInfo,addMarad,addAnalyse,mardClient,analyseClient,voyagesClient,loginClient,clientsEng,voyagesEng,staticsEng,mardEng,analyseEng,editClient,getClientByIdEng,editVoyage,getVoyageByIdAdmin,deleteVoayage}
