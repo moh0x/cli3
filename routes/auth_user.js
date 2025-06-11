@@ -34,6 +34,6 @@ router.put('/status',verifyToken,authController.changeUserStates)
 router.delete('/delete',verifyToken,authController.deleteUser)
 router.put('/client/edit',verifyToken,authController.editClient)
 router.post('/client/get',verifyToken,authController.getClientByIdEng)
-
+router.get('/statics/admin',verifyToken,authController.staticsAdmin)
 module.exports = router
 
