@@ -15,7 +15,7 @@ router.get('/analyse/client',authController.analyseClient)
 router.get('/mard/client',authController.mardClient)
 router.get('/analyse/eng',authController.analyseEng)
 router.get('/mard/eng',authController.mardEng)
-router.get('/voyage/client',authController.mardClient)
+router.get('/voyage/client',authController.voyagesClient)
 router.get('/voyage/eng',authController.voyagesEng)
 router.post('/logout',verifyToken,authController.logout)
 router.put('/update-profile',verifyToken,authController.updateProfile)
@@ -36,3 +36,4 @@ router.put('/client/edit',verifyToken,authController.editClient)
 router.post('/client/get',verifyToken,authController.getClientByIdEng)
 
 module.exports = router
+
