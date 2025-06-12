@@ -692,6 +692,22 @@ const deleteVoayage = async (req,res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
+const deleteClientByAdmin = async (req,res) => {
+  try {
+    const token = req.headers.token;
+  const {id} = req.body;
+  const admin = await User.findOne({token:token})
+  if (admin.role != "eng") {
+    return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
+  }
+ await Client.findByIdAndDelete(id);
+   res.status(200).json({"status":httpStatus.SUCCESS,"data":null});
+  } catch (error) {
+     console.log(error);
+    
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
 const staticsAdmin= async (req,res) => {
   try {
     const token = req.headers.token;
@@ -732,4 +748,4 @@ const eng = await User.findOne({token:token})
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
-module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates,addClient,addVoyage,clientInfo,addMarad,addAnalyse,mardClient,analyseClient,voyagesClient,loginClient,clientsEng,voyagesEng,staticsEng,mardEng,analyseEng,editClient,getClientByIdEng,editVoyage,getVoyageByIdAdmin,deleteVoayage,staticsAdmin}
+module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates,addClient,addVoyage,clientInfo,addMarad,addAnalyse,mardClient,analyseClient,voyagesClient,loginClient,clientsEng,voyagesEng,staticsEng,mardEng,analyseEng,editClient,getClientByIdEng,editVoyage,getVoyageByIdAdmin,deleteVoayage,staticsAdmin,deleteClientByAdmin}
