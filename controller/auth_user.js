@@ -337,7 +337,7 @@ const editClient = async (req,res) => {
   if (eng.role != "eng") {
     return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
   }
-  const client = await Client.findOne({id:id})
+  const client = await Client.findOne({_id:id})
     const tokenCli = jwt.sign({email:email ?? client.email,username:username ?? client.username},"token")
   const clientS = await Client.findByIdAndUpdate(client._id,{$set:{
     token:tokenCli,
