@@ -366,12 +366,19 @@ const editClient = async (req,res) => {
 }
 const getClientByIdEng = async(req,res) =>{
   try {
+    console.log('ssssssss');
+    
      const token = req.headers.token;
   const eng = await User.findOne({token:token})
    if (eng.role != "eng") {
     return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
   }
-  const client = await Client.findOne({id:req.body.id})
+  const id = req.body.id;
+  const client = await Client.findOne({_id:id})
+  console.log(client);
+  console.log(id);
+  
+  
      res.status(200).json({"status":httpStatus.SUCCESS,"data":client});
   } catch (error) {
       res.status(500).json({ error: "Internal Server Error" });
