@@ -37,4 +37,5 @@ router.put('/client/edit',verifyToken,authController.editClient)
 router.put('/analyse/finish',verifyToken,authController.finishAnalyse)
 router.post('/client/get',verifyToken,authController.getClientByIdEng)
 router.get('/statics/admin',verifyToken,authController.staticsAdmin)
+router.delete('/delete/analyse',verifyToken,authController.deleteAnalyseByAdmin)
 module.exports = router
