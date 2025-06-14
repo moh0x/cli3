@@ -785,4 +785,41 @@ const deleteAnalyseByAdmin = async (req,res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
-module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates,addClient,addVoyage,clientInfo,addMarad,addAnalyse,mardClient,analyseClient,voyagesClient,loginClient,clientsEng,voyagesEng,staticsEng,mardEng,analyseEng,editClient,getClientByIdEng,editVoyage,getVoyageByIdAdmin,deleteVoayage,staticsAdmin,deleteClientByAdmin,finishAnalyse,deleteAnalyseByAdmin}
+const finishMard = async (req,res) => {
+  try {
+    const token = req.headers.token;
+  const {id,img} = req.body;
+  const eng = await User.findOne({token:token})
+  if (eng.role != "eng") {
+    return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
+  }
+  const mard = await Mard.findOne({_id:id})
+  const mardS = await Mard.findByIdAndUpdate(mard._id,{$set:{
+    img:img ??mard.img,
+    status:"finish"
+  }});
+ const clientRet =  await mardS.save();
+   res.status(200).json({"status":httpStatus.SUCCESS,"data":clientRet});
+  } catch (error) {
+     console.log(error);
+    
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+const deleteMardeByAdmin = async (req,res) => {
+  try {
+    const token = req.headers.token;
+  const {id} = req.body;
+  const admin = await User.findOne({token:token})
+  if (admin.role != "eng") {
+    return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
+  }
+ await Mard.findByIdAndDelete(id);
+   res.status(200).json({"status":httpStatus.SUCCESS,"data":null});
+  } catch (error) {
+     console.log(error);
+    
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates,addClient,addVoyage,clientInfo,addMarad,addAnalyse,mardClient,analyseClient,voyagesClient,loginClient,clientsEng,voyagesEng,staticsEng,mardEng,analyseEng,editClient,getClientByIdEng,editVoyage,getVoyageByIdAdmin,deleteVoayage,staticsAdmin,deleteClientByAdmin,finishAnalyse,deleteAnalyseByAdmin,finishMard,deleteMardeByAdmin}
