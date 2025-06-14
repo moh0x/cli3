@@ -35,7 +35,11 @@ router.delete('/delete',verifyToken,authController.deleteUser)
 router.delete('/delete/client',verifyToken,authController.deleteClientByAdmin)
 router.put('/client/edit',verifyToken,authController.editClient)
 router.put('/analyse/finish',verifyToken,authController.finishAnalyse)
+router.put('/mard/finish',verifyToken,authController.finishMard)
 router.post('/client/get',verifyToken,authController.getClientByIdEng)
 router.get('/statics/admin',verifyToken,authController.staticsAdmin)
 router.delete('/delete/analyse',verifyToken,authController.deleteAnalyseByAdmin)
+router.delete('/delete/mard',verifyToken,authController.deleteMardeByAdmin)
+
 module.exports = router
+
