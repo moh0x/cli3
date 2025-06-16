@@ -298,7 +298,7 @@ const inActiveUser = async(req,res)=>{
 const addClient = async (req,res) => {
   try {
     const token = req.headers.token;
-  const {email,password,username,userWork,userWorkName,nif,phoneNumber,numberOfNif,typeOfProduit,quntityPaid,quntityDisponible,tax,longitutude,latitude,notes,adress} = req.body;
+  const {email,password,username,userWork,userWorkName,nif,phoneNumber,numberOfNif,typeOfProduit,quntityPaid,quntityDisponible,tax,longitutude,latitude,notes,adress,img} = req.body;
   const eng = await User.findOne({token:token})
   if (eng.role != "eng" && eng.role != "admin") {
     return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
@@ -307,6 +307,7 @@ const addClient = async (req,res) => {
   const client = new Client({
     token:tokenCli,
     email:email,
+    img:img,
     password:password,
     username:username ,
     userWork:userWork  ,
@@ -333,7 +334,7 @@ const addClient = async (req,res) => {
 const editClient = async (req,res) => {
   try {
     const token = req.headers.token;
-  const {id,email,password,username,userWork,userWorkName,nif,phoneNumber,numberOfNif,typeOfProduit,quntityPaid,quntityDisponible,tax,longitutude,latitude,notes} = req.body;
+  const {id,email,password,username,userWork,userWorkName,nif,phoneNumber,numberOfNif,typeOfProduit,quntityPaid,quntityDisponible,tax,longitutude,latitude,notes,img} = req.body;
   const eng = await User.findOne({token:token})
   if (eng.role != "eng" && eng.role != "admin") {
     return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
@@ -342,6 +343,7 @@ const editClient = async (req,res) => {
     const tokenCli = jwt.sign({email:email ?? client.email,username:username ?? client.username},"token")
   const clientS = await Client.findByIdAndUpdate(client._id,{$set:{
     token:tokenCli,
+    img:img ?? client.img,
     email:email ?? client.email,
     password:password ?? client.password,
     username:username ?? client.username,
