@@ -56,6 +56,9 @@ const clientSchema = new mongoose.Schema(
         },
         adress:{
             type:String
+        },
+        img:{
+            type:String
         }
     },
     
