@@ -300,7 +300,7 @@ const addClient = async (req,res) => {
     const token = req.headers.token;
   const {email,password,username,userWork,userWorkName,nif,phoneNumber,numberOfNif,typeOfProduit,quntityPaid,quntityDisponible,tax,longitutude,latitude,notes,adress} = req.body;
   const eng = await User.findOne({token:token})
-  if (eng.role != "eng" || eng.role != "admin") {
+  if (eng.role == "eng" || eng.role == "admin") {
     return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
   }
     const tokenCli = jwt.sign({email:email,username:username},"token")
@@ -335,7 +335,7 @@ const editClient = async (req,res) => {
     const token = req.headers.token;
   const {id,email,password,username,userWork,userWorkName,nif,phoneNumber,numberOfNif,typeOfProduit,quntityPaid,quntityDisponible,tax,longitutude,latitude,notes} = req.body;
   const eng = await User.findOne({token:token})
-  if (eng.role != "eng") {
+  if (eng.role == "eng") {
     return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
   }
   const client = await Client.findOne({_id:id})
