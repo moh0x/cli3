@@ -45,9 +45,6 @@ const clientSchema = new mongoose.Schema(
         tax:{
             type:Number
         },
-        img:{
-            type:String
-        },
         longitutude:{
             type:Number
         },
@@ -55,6 +52,9 @@ const clientSchema = new mongoose.Schema(
             type:Number
         },
         notes:{
+            type:String
+        },
+        adress:{
             type:String
         }
     },
