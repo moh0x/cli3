@@ -298,9 +298,9 @@ const inActiveUser = async(req,res)=>{
 const addClient = async (req,res) => {
   try {
     const token = req.headers.token;
-  const {email,password,username,userWork,userWorkName,nif,phoneNumber,numberOfNif,typeOfProduit,quntityPaid,quntityDisponible,tax,longitutude,latitude,notes} = req.body;
+  const {email,password,username,userWork,userWorkName,nif,phoneNumber,numberOfNif,typeOfProduit,quntityPaid,quntityDisponible,tax,longitutude,latitude,notes,adress} = req.body;
   const eng = await User.findOne({token:token})
-  if (eng.role != "eng") {
+  if (eng.role != "eng" || eng.role != "admin") {
     return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
   }
     const tokenCli = jwt.sign({email:email,username:username},"token")
@@ -320,6 +320,7 @@ const addClient = async (req,res) => {
     tax:tax,
     longitutude:longitutude,
     latitude:latitude,
+    adress:adress,
     notes:notes});
  const clientRet =  await client.save();
    res.status(200).json({"status":httpStatus.SUCCESS,"data":clientRet});
@@ -370,7 +371,7 @@ const getClientByIdEng = async(req,res) =>{
     
      const token = req.headers.token;
   const eng = await User.findOne({token:token})
-   if (eng.role != "eng") {
+   if (eng.role != "eng" || eng.role != "admin") {
     return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
   }
   const id = req.body.id;
@@ -389,7 +390,7 @@ const clientsEng = async(req,res)=>{
    try {
      const token = req.headers.token;
       const eng = await User.findOne({token:token})
-   if (eng.role != "eng") {
+   if (eng.role != "eng" || eng.role != "admin") {
     return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
   }
   const clients = await Client.find().sort({createdAt:-1})
@@ -697,7 +698,7 @@ const deleteClientByAdmin = async (req,res) => {
     const token = req.headers.token;
   const {id} = req.body;
   const admin = await User.findOne({token:token})
-  if (admin.role != "eng") {
+  if (admin.role != "admin") {
     return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
   }
  await Client.findByIdAndDelete(id);
