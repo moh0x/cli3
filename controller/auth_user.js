@@ -335,7 +335,7 @@ const editClient = async (req,res) => {
     const token = req.headers.token;
   const {id,email,password,username,userWork,userWorkName,nif,phoneNumber,numberOfNif,typeOfProduit,quntityPaid,quntityDisponible,tax,longitutude,latitude,notes} = req.body;
   const eng = await User.findOne({token:token})
-  if (eng.role == "eng") {
+  if (eng.role != "eng" && eng.role != "admin") {
     return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
   }
   const client = await Client.findOne({_id:id})
@@ -371,7 +371,7 @@ const getClientByIdEng = async(req,res) =>{
     
      const token = req.headers.token;
   const eng = await User.findOne({token:token})
-   if (eng.role != "eng" || eng.role != "admin") {
+   if (eng.role != "eng" && eng.role != "admin") {
     return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
   }
   const id = req.body.id;
@@ -390,7 +390,7 @@ const clientsEng = async(req,res)=>{
    try {
      const token = req.headers.token;
       const eng = await User.findOne({token:token})
-   if (eng.role != "eng" || eng.role != "admin") {
+   if (eng.role != "eng" && eng.role != "admin") {
     return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
   }
   const clients = await Client.find().sort({createdAt:-1})
