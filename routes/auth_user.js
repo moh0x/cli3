@@ -8,6 +8,7 @@ router.post('/signup',body('password').isLength({min:8,max:50}).withMessage('typ
 router.post('/login',body("email").isLength({min:5,max:50}).withMessage("type valid email"),body('password').isLength({min:8,max:50}).withMessage('type valid password'),authController.login)
 router.post('/login/client',body("email").isLength({min:5,max:50}).withMessage("type valid email"),body('password').isLength({min:8,max:50}).withMessage('type valid password'),authController.loginClient)
 router.post('/client/add',verifyToken,authController.addClient)
+router.post('/client/delete',verifyToken,authController.deleteClient)
 router.post('/voyage/add',verifyToken,authController.addVoyage)
 router.post('/analyse/add',authController.addAnalyse)
 router.post('/mard/add',authController.addMarad)
@@ -42,4 +43,5 @@ router.delete('/delete/analyse',verifyToken,authController.deleteAnalyseByAdmin)
 router.delete('/delete/mard',verifyToken,authController.deleteMardeByAdmin)
 
 module.exports = router
+
 
