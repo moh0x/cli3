@@ -825,4 +825,16 @@ const deleteMardeByAdmin = async (req,res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
-module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates,addClient,addVoyage,clientInfo,addMarad,addAnalyse,mardClient,analyseClient,voyagesClient,loginClient,clientsEng,voyagesEng,staticsEng,mardEng,analyseEng,editClient,getClientByIdEng,editVoyage,getVoyageByIdAdmin,deleteVoayage,staticsAdmin,deleteClientByAdmin,finishAnalyse,deleteAnalyseByAdmin,finishMard,deleteMardeByAdmin}
+const deleteClient = async (req,res)=>{
+  try {
+    const token = req.headers.token;
+    const client = await Client.findOne({token:token},{password:false})
+       await Client.findByIdAndDelete(client._id); 
+       res.status(200).json({"status":httpStatus.SUCCESS,"data":null });
+  } catch (error) {
+    console.log(error);
+    
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates,addClient,addVoyage,clientInfo,addMarad,addAnalyse,mardClient,analyseClient,voyagesClient,loginClient,clientsEng,voyagesEng,staticsEng,mardEng,analyseEng,editClient,getClientByIdEng,editVoyage,getVoyageByIdAdmin,deleteVoayage,staticsAdmin,deleteClientByAdmin,finishAnalyse,deleteAnalyseByAdmin,finishMard,deleteMardeByAdmin,deleteClient}
