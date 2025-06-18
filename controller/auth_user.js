@@ -700,6 +700,8 @@ const deleteClientByAdmin = async (req,res) => {
     const token = req.headers.token;
   const {id} = req.body;
   const admin = await User.findOne({token:token})
+	    console.log(admin);
+
   if (admin.role != "admin") {
     return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
   }
