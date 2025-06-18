@@ -612,7 +612,7 @@ const mardEng = async (req,res) => {
 const eng = await User.findOne({token:token})
 console.log(eng);
 
-  if (eng.role != "eng") {
+  if (eng.role != "eng" && eng.role != "admin") {
     return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
   }
   const mards = await Mard.find().sort({createdAt:-1})
@@ -627,7 +627,7 @@ const analyseEng = async (req,res) => {
   try {
      const token = req.headers.token;
 const eng = await User.findOne({token:token})
-  if (eng.role != "eng") {
+  if (eng.role != "eng" && eng.role != "admin") {
     return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
   }
   const analyses = await Analyse.find().sort({createdAt:-1})
@@ -667,7 +667,7 @@ const getVoyageByIdAdmin = async(req,res) =>{
   try {
      const token = req.headers.token;
   const admin = await User.findOne({token:token})
-   if (admin.role != "admin") {
+  if (admin.role != "eng" && admin.role != "admin") {
     return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
   }
   const voyage = await Voyage.findOne({id:req.body.id})
@@ -700,8 +700,8 @@ const deleteClientByAdmin = async (req,res) => {
     const token = req.headers.token;
   const {id} = req.body;
   const admin = await User.findOne({token:token})
-	    console.log(admin);
-
+  console.log(admin);
+  
   if (admin.role != "admin") {
     return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
   }
