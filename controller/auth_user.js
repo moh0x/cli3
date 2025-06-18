@@ -779,7 +779,7 @@ const deleteAnalyseByAdmin = async (req,res) => {
     const token = req.headers.token;
   const {id} = req.body;
   const admin = await User.findOne({token:token})
-  if (admin.role != "eng") {
+  if (admin.role != "admin") {
     return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
   }
  await Analyse.findByIdAndDelete(id);
@@ -816,7 +816,7 @@ const deleteMardeByAdmin = async (req,res) => {
     const token = req.headers.token;
   const {id} = req.body;
   const admin = await User.findOne({token:token})
-  if (admin.role != "eng") {
+  if (admin.role != "admin") {
     return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
   }
  await Mard.findByIdAndDelete(id);
