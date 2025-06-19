@@ -11,6 +11,7 @@ router.post('/client/add',verifyToken,authController.addClient)
 router.post('/client/delete',verifyToken,authController.deleteClient)
 router.post('/voyage/add',verifyToken,authController.addVoyage)
 router.post('/analyse/add',authController.addAnalyse)
+router.post('/product/add',authController.produ)
 router.post('/mard/add',authController.addMarad)
 router.get('/analyse/client',authController.analyseClient)
 router.get('/mard/client',authController.mardClient)
@@ -43,5 +44,4 @@ router.delete('/delete/analyse',verifyToken,authController.deleteAnalyseByAdmin)
 router.delete('/delete/mard',verifyToken,authController.deleteMardeByAdmin)
 
 module.exports = router
-
 
