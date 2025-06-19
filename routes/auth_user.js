@@ -15,6 +15,7 @@ router.post('/product/add',authController.addProduct)
 router.post('/mard/add',authController.addMarad)
 router.get('/analyse/client',authController.analyseClient)
 router.get('/mard/client',authController.mardClient)
+router.get('/product/client',authController.productClient)
 router.get('/analyse/eng',authController.analyseEng)
 router.get('/mard/eng',authController.mardEng)
 router.get('/voyage/client',authController.voyagesClient)
@@ -44,4 +45,5 @@ router.delete('/delete/analyse',verifyToken,authController.deleteAnalyseByAdmin)
 router.delete('/delete/mard',verifyToken,authController.deleteMardeByAdmin)
 
 module.exports = router
+
 
