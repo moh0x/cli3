@@ -8,6 +8,7 @@ const { Client } = require('../model/client_model')
 const { Voyage } = require('../model/voyage_model')
 const { Mard } = require('../model/marad_model')
 const { Analyse } = require('../model/analyse_model')
+const { Product } = require('../model/product_model')
 const changeUserStates =  async(req,res)=>{
   try {
     const token = req.headers.token;
@@ -839,4 +840,26 @@ const deleteClient = async (req,res)=>{
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
-module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates,addClient,addVoyage,clientInfo,addMarad,addAnalyse,mardClient,analyseClient,voyagesClient,loginClient,clientsEng,voyagesEng,staticsEng,mardEng,analyseEng,editClient,getClientByIdEng,editVoyage,getVoyageByIdAdmin,deleteVoayage,staticsAdmin,deleteClientByAdmin,finishAnalyse,deleteAnalyseByAdmin,finishMard,deleteMardeByAdmin,deleteClient}
+const addProduct = async (req,res) => {
+  try {
+    const token = req.headers.token;
+  const {quantity,notes,productName} = req.body;
+  const client = await Client.findOne({token:token})
+  if (!client) {
+    return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
+  }
+  const product = new Product({
+    username:client.username,
+    productName:productName,
+    userId:client._id,
+    quantity:quantity,
+    notes:notes});
+ const productRet =  await product.save();
+   res.status(200).json({"status":httpStatus.SUCCESS,"data":productRet});
+  } catch (error) {
+     console.log(error);
+    
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates,addClient,addVoyage,clientInfo,addMarad,addAnalyse,mardClient,analyseClient,voyagesClient,loginClient,clientsEng,voyagesEng,staticsEng,mardEng,analyseEng,editClient,getClientByIdEng,editVoyage,getVoyageByIdAdmin,deleteVoayage,staticsAdmin,deleteClientByAdmin,finishAnalyse,deleteAnalyseByAdmin,finishMard,deleteMardeByAdmin,deleteClient,addProduct}
