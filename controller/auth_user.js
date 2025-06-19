@@ -556,7 +556,7 @@ const loginClient = async (req,res) => {
   if (!client) {
     return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
   }
-    const tokenCli = jwt.sign({email:email,username:username},"token")
+    const tokenCli = jwt.sign({email:email},"token")
   await Client.findByIdAndUpdate(client._id,{$set:{
     token:tokenCli
   }})
