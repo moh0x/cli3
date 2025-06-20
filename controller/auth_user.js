@@ -348,7 +348,7 @@ const voyagesEng = async (req,res) => {
   try {
     const token = req.headers.token;
 const eng = await User.findOne({token:token})
-  if (eng.role != "eng") {
+  if (eng.role != "eng" && eng.role != "admin") {
     return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
   }
   const voyages = await Voyage.find()
