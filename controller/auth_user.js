@@ -9,81 +9,9 @@ const { Voyage } = require('../model/voyage_model')
 const { Mard } = require('../model/marad_model')
 const { Analyse } = require('../model/analyse_model')
 const { Product } = require('../model/product_model')
-const changeUserStates =  async(req,res)=>{
-  try {
-    const token = req.headers.token;
-       const user = await User.findOne({token:token})
-       console.log(user);
-     if (!user) {
-    return  res.status(400).json({"status":httpStatus.FAIL,"data":null,"message":"there is no user with this id" });
-     }
-     await User.findByIdAndUpdate(user.id,{
-      $set:{
-        status:user.status =='online'?'offline': 'online'
-      }
-     })
-     await user.save();
-       res.status(200).json({"status":httpStatus.SUCCESS,"data":user});
 
-  } catch (error) {
 
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-}
-const ban =  async(req,res)=>{
-  try {
-    const token = req.headers.token;
-    const adminTrue = await Admin.findOne({token:token})
-    const{_id,banned}=req.body;
-    console.log(_id);
-    
-       const user = await User.findOne({_id:_id})
-       console.log(user);
-       
-     if (!user) {
-    return  res.status(400).json({"status":httpStatus.FAIL,"data":null,"message":"there is no user with this id" });
-     }
-     await User.findByIdAndUpdate(user.id,{
-      $set:{
-        isBanned:true,
-        banned:banned
-      }
-     })
-     await user.save();
-       res.status(200).json({"status":httpStatus.SUCCESS,"data":user});
 
-  } catch (error) {
-    console.log(error);
-    
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-}
-const disBan =  async(req,res)=>{
-  try {
-    const token = req.headers.token;
-    const adminTrue = await Admin.findOne({token:token})
-    const{_id}=req.body;
-  
-       const user = await User.findOne({_id:_id})
-       console.log(user);
-       
-     if (!user) {
-    return  res.status(400).json({"status":httpStatus.FAIL,"data":null,"message":"there is no user with this id" });
-     }
-     await User.findByIdAndUpdate(user.id,{
-      $set:{
-        isBanned:false
-      }
-     })
-     await user.save();
-       res.status(200).json({"status":httpStatus.SUCCESS,"data":user});
-
-  } catch (error) {
-    console.log(error);
-    
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-}
 const signUp =async(req,res)=>{
     try {
         const valid = validationResult(req)
@@ -156,34 +84,6 @@ const logout = async (req, res) => {
 		res.status(500).json({ error: "Internal Server Error" });
 	}
 };
-const updateProfile =  async (req, res) => {
-	try {
-		const token = req.headers.token;
-    const user = await User.findOne({token:token},{password:false})
-    const{logtitude,latitude,isOnline,status,email,isAssurance,city,fullname,date,matricule,baladiya,onwan} = req.body
-  await User.findByIdAndUpdate(user._id,{ 
-    $set:{
-      logtitude:logtitude,
-      latitude:latitude,
-      isOnline:isOnline ?? user.isOnline,
-      status:status ?? user.status,
-      email:email ?? user.email,
-      isAssurance:isAssurance ?? user.isAssurance,
-      city:city ?? user.city,
-      fullname:fullname ?? user.fullname,
-	    date:date ??user.date,
-	    matricule:matricule ??user.matricule,
-      baladiya:baladiya ?? user.baladiya,
-      onwan:onwan ?? user.onwan
-    }
-  })
-  await user.save()
-  res.status(200).json({"status":httpStatus.SUCCESS,"data":user})  
-	} catch (error) {
-		console.log("Error in logout controller", error.message);
-		res.status(500).json({ error: "Internal Server Error" });
-	}
-};
 const userInfo = async (req,res)=>{
   try {
     const token = req.headers.token;
@@ -194,22 +94,6 @@ const userInfo = async (req,res)=>{
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
-const updateNotificationToken =  async (req, res) => {
-	try {
-		const token = req.headers.token;
-    const user = await User.findOne({token:token},{password:false})
-    const{tokenNotificatin} = req.body
-  await User.findByIdAndUpdate(user._id,{ 
-    $set:{
-      tokenNotificatin:tokenNotificatin
-    }
-  })
-  res.status(200).json({"status":httpStatus.SUCCESS,"data":user})  
-	} catch (error) {
-		console.log("Error in logout controller", error.message);
-		res.status(500).json({ error: "Internal Server Error" });
-	}
-};
 const deleteUser = async (req,res)=>{
   try {
     const token = req.headers.token;
@@ -222,80 +106,7 @@ const deleteUser = async (req,res)=>{
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
-const getInActiveUsers = async(req,res)=>{
-  try {
-    const token = req.headers.token;
-    const adminTrue = await Admin.findOne({token:token})
-    
-       const inActiveUsers = await User.find({isVerified:false}).sort({createdAt:-1})
-       res.status(200).json({"status":httpStatus.SUCCESS,"data":inActiveUsers});
-      
-  } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-}
-const activeUser = async(req,res)=>{
-  try {
-    const _id=req.body._id;
-       const inActiveUser = await User.findOne({_id:_id})
-       console.log(inActiveUser);
-       
-     if (!inActiveUser) {
-    return  res.status(400).json({"status":httpStatus.FAIL,"data":null,"message":"there is no user with this id" });
-     }
-     await User.findByIdAndUpdate(inActiveUser.id,{
-      $set:{
-        isVerified:true,
-        isBanned:false,
-        banned:null
-      }
-     })
-     await inActiveUser.save();
-       const retUser = await User.findOne({_id:_id})
-       res.status(200).json({"status":httpStatus.SUCCESS,"data":retUser});
 
-  } catch (error) {
-    console.log(error);
-    
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-}
-const getActiveUsers = async(req,res)=>{
-  try {
-    const token = req.headers.token;
-    const adminTrue = await Admin.findOne({token:token})
-    
-       const activeUsers = await User.find({isVerified:true}).sort({createdAt:-1})
-       res.status(200).json({"status":httpStatus.SUCCESS,"data":activeUsers});
-      
-  } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-}
-const inActiveUser = async(req,res)=>{
-  try {
-    const token = req.headers.token;
-    const adminTrue = await Admin.findOne({token:token})
-    const{_id}=req.body._id;
-       const activeUser = await User.findOne({id:_id})
-     if (!activeUser) {
-    return  res.status(400).json({"status":httpStatus.FAIL,"data":null,"message":"there is no user with this id" });
-     }
-     await User.findByIdAndUpdate(activeUser.id,{
-      $set:{
-        isVerified:false
-      }
-     })
-     await activeUser.save();
-       const retUser = await User.findOne({id:_id})
-       res.status(200).json({"status":httpStatus.SUCCESS,"data":retUser});
-
-  } catch (error) {
-    console.log(error);
-    
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-}
 const addClient = async (req,res) => {
   try {
     const token = req.headers.token;
@@ -341,7 +152,7 @@ const editClient = async (req,res) => {
     return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
   }
   const client = await Client.findOne({_id:id})
-    const tokenCli = jwt.sign({email:email ?? client.email,username:username ?? client.username},"token")
+    const tokenCli = jwt.sign({email:email},"token")
   const clientS = await Client.findByIdAndUpdate(client._id,{$set:{
     token:tokenCli,
     img:img ?? client.img,
@@ -915,4 +726,20 @@ const finishProduct= async (req,res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
-module.exports = {signUp,login,logout,updateProfile,userInfo,updateNotificationToken,deleteUser,getInActiveUsers,activeUser,getActiveUsers,inActiveUser,ban,disBan,changeUserStates,addClient,addVoyage,clientInfo,addMarad,addAnalyse,mardClient,analyseClient,voyagesClient,loginClient,clientsEng,voyagesEng,staticsEng,mardEng,analyseEng,editClient,getClientByIdEng,editVoyage,getVoyageByIdAdmin,deleteVoayage,staticsAdmin,deleteClientByAdmin,finishAnalyse,deleteAnalyseByAdmin,finishMard,deleteMardeByAdmin,deleteClient,addProduct,productClient,productEng,finishProduct}
+const deleteProductByAdmin = async (req,res) => {
+  try {
+    const token = req.headers.token;
+  const {id} = req.body;
+  const admin = await User.findOne({token:token})
+  if (admin.role != "admin") {
+    return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
+  }
+ await Product.findByIdAndDelete(id);
+   res.status(200).json({"status":httpStatus.SUCCESS,"data":null});
+  } catch (error) {
+     console.log(error);
+    
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+module.exports = {signUp,login,logout,userInfo,deleteUser,addClient,addVoyage,clientInfo,addMarad,addAnalyse,mardClient,analyseClient,voyagesClient,loginClient,clientsEng,voyagesEng,staticsEng,mardEng,analyseEng,editClient,getClientByIdEng,editVoyage,getVoyageByIdAdmin,deleteVoayage,staticsAdmin,deleteClientByAdmin,finishAnalyse,deleteAnalyseByAdmin,finishMard,deleteMardeByAdmin,deleteClient,addProduct,productClient,productEng,finishProduct,deleteProductByAdmin}
