@@ -497,9 +497,7 @@ const deleteVoayage = async (req,res) => {
   if (admin.role != "admin") {
     return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
   }
-  const voyage = await Voyage.findOne({id:id})
-  const voyageS = await Voyage.findByIdAndDelete(voyage._id);
- const voyageRet =  await voyageS.save();
+ await Voyage.findByIdAndDelete(id);
    res.status(200).json({"status":httpStatus.SUCCESS,"data":null});
   } catch (error) {
      console.log(error);
