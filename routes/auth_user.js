@@ -37,7 +37,6 @@ router.get('/statics/admin',verifyToken,authController.staticsAdmin)
 router.delete('/delete/analyse',verifyToken,authController.deleteAnalyseByAdmin)
 router.delete('/delete/mard',verifyToken,authController.deleteMardeByAdmin)
 router.delete('/delete/product',verifyToken,authController.deleteProductByAdmin)
+router.delete('/delete/voyage',verifyToken,authController.deleteVoayage)
 module.exports = router
-
-
 
