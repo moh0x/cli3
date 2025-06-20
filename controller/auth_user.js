@@ -710,7 +710,7 @@ const finishProduct= async (req,res) => {
     const token = req.headers.token;
   const {id,img} = req.body;
   const eng = await User.findOne({token:token})
-  if (eng.role != "eng") {
+  if (eng.role != "eng" && eng.role != "admin") {
     return   res.status(403).send({ "success": false, "message": "you don't have perrmision" })
   }
   const product = await Product.findOne({_id:id})
