@@ -14,10 +14,7 @@ const { Product } = require('../model/product_model')
 
 const signUp =async(req,res)=>{
     try {
-        const valid = validationResult(req)
-        if (!valid.isEmpty()) {
-          return  res.status(400).json({"status":httpStatus.FAIL,"data":null,"message":valid['errors'][0].msg});
-        }
+
         const {username,email,password,role,longitutude,latitude,address} = req.body      
         const user = await User.findOne({email:email});
         if (user) {
